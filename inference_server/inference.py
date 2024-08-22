@@ -32,9 +32,8 @@ class InferenceService:
 
     def start(self):
         print("Esperando la prueba...")
+
         conn, addr = self.server_socket.accept()
-        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.connect(SERVER_ADDRESS)
         header = conn.recv(6)         
         service_id, packet_type, payload_length = struct.unpack('>BB I', header)
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -48,22 +48,17 @@ class ServiceHandler:
                 header = struct.pack('>BB I', 0x00, 0x04, payload_length)
                 send_socket.sendall(header)
                 conn, addr = self.server_socket.accept()
+                print(f"Conexión aceptada desde {addr}")
                 header = conn.recv(6)         
-                print(header)
                 service_id, packet_type, payload_length = struct.unpack('>BB I', header)
-                payload = b''
-                while len(payload) < payload_length:
-                    chunk = conn.recv(4096)
-                    if not chunk:
-                        break
-                    payload += chunk
                 print(f"Conexión funcionando correctamente.")
             except Exception as e:
                 print(f"Error en conexión")
                 print(e)
                 return False
             finally:
-                send_socket.close()
+                send_socket.close()  # Close the client socket
+                conn.close()         # Close the server socket
         return True
 
     def start(self):
