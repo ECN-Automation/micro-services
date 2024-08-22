@@ -58,7 +58,7 @@ class InferenceService:
                 payload += chunk
             try:
                 client_socket.connect(SERVER_ADDRESS)
-                send_payload(client_socket,payload)
+                self.send_payload(client_socket,payload)
             except Exception as e:
                 print(f"Error en conexión")
             finally:

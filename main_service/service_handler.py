@@ -78,6 +78,7 @@ class ServiceHandler:
                 print("Esperando conexión...")
                 conn, addr = self.server_socket.accept()
                 header = conn.recv(6)         
+                print(header)
                 service_id, packet_type, payload_length = struct.unpack('>BB I', header)
                 payload = b''
                 while len(payload) < payload_length:
@@ -95,7 +96,7 @@ class ServiceHandler:
                         send_socket.connect(("localhost", PORT_INFERENCE))
                         
                         # Send the image
-                        send_payload(send_socket, payload)
+                        self.send_payload(send_socket, payload, SERVICE_INFERENCE, PACKET_IMAGE)
 
                         print("Imagen enviada para inferencia.")
                     finally:
@@ -111,7 +112,7 @@ class ServiceHandler:
                         send_socket.connect(("localhost", PORT_GRANULOMETRY))
                         
                         # Send the image
-                        send_payload(send_socket, payload)
+                        self.send_payload(send_socket, payload, SERVICE_GRANULOMETRY, PACKET_INFERENCE)
 
                         print("Inferencias enviadas para calculo granulométrico.")
                     finally:
@@ -124,7 +125,7 @@ class ServiceHandler:
                     try:
                         send_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                         send_socket.connect(("localhost", PORT_DCS))
-                        send_payload(send_socket, payload)
+                        self.send_payload(send_socket, payload, SERVICE_DCS, PACKET_NUMERIC)
 
                         print("Inferencias enviadas para calculo granulométrico.")
                     finally:

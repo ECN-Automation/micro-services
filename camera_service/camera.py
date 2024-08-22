@@ -45,14 +45,17 @@ class CameraService:
             client_socket.sendall(header)
             client_socket.close()
         while True:
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             conn, addr = self.server_socket.accept()
             header = conn.recv(6)         
-            service_id, packet_type, payload_length = struct.unpack('>BB I', header)
             try:
                 if TESTING:
+                    print("Leyendo imagen...")
                     image = cv2.imread(IMAGE_PATH)
+                    print("Conectando...")
                     client_socket.connect(SERVER_ADDRESS)
-                    send_image(client_socket,image)
+                    
+                    self.send_image(client_socket,image)
             except Exception as e:
                 print(f"Error en conexión: {e}")
             finally:
