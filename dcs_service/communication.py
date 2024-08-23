@@ -36,6 +36,7 @@ class CommunicationService:
             header = struct.pack('>BB I', 0x00, 0x04, payload_length)
             client_socket.sendall(header)
             client_socket.close()
+            conn.close()
         while True:
             conn, addr = self.server_socket.accept()
             header = conn.recv(6)         
@@ -46,5 +47,3 @@ class CommunicationService:
                 if not chunk:
                     break
                 payload += chunk
-            client_socket.connect(SERVER_ADDRESS)
-            client_socket.close()

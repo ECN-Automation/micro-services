@@ -45,6 +45,7 @@ class InferenceService:
             header = struct.pack('>BB I', 0x00, 0x04, payload_length)
             client_socket.sendall(header)
             client_socket.close()
+            conn.close()
         while True:
             conn, addr = self.server_socket.accept()
             header = conn.recv(6)         
@@ -57,9 +58,10 @@ class InferenceService:
                     break
                 payload += chunk
             try:
+                client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 client_socket.connect(SERVER_ADDRESS)
                 self.send_payload(client_socket,payload)
             except Exception as e:
-                print(f"Error en conexión")
+                print(f"Error en conexión: {e}")
             finally:
                 client_socket.close()

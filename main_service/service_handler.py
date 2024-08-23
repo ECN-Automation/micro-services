@@ -53,8 +53,7 @@ class ServiceHandler:
                 service_id, packet_type, payload_length = struct.unpack('>BB I', header)
                 print(f"Conexión funcionando correctamente.")
             except Exception as e:
-                print(f"Error en conexión")
-                print(e)
+                print(f"Error en conexión: {e}")
                 return False
             finally:
                 send_socket.close()  # Close the client socket
@@ -78,7 +77,7 @@ class ServiceHandler:
                 print("Esperando conexión...")
                 conn, addr = self.server_socket.accept()
                 header = conn.recv(6)         
-                print(header)
+                print(f"Header recibido: {header}")
                 service_id, packet_type, payload_length = struct.unpack('>BB I', header)
                 payload = b''
                 while len(payload) < payload_length:
@@ -119,7 +118,7 @@ class ServiceHandler:
                     # Close the socket
                         send_socket.close()
 
-                if service_id == SERVICE_DCS:
+                if service_id == SERVICE_GRANULOMETRY:
                     print("Información granulométrica recibida.")
                     print("Enviando información para comunicación DCS")
                     try:
